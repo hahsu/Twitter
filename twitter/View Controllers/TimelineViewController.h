@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface TimelineViewController : UIViewController
-
+@property (nonatomic, strong) NSArray *tweets;
 @end
