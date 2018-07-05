@@ -13,6 +13,7 @@
 #import "ComposeViewController.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "DetailsViewController.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tweetTableView;
@@ -76,9 +77,18 @@
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    UINavigationController *navigationController = [segue destinationViewController];
-    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-    composeController.delegate = self;
+    if([segue.destinationViewController isKindOfClass:[DetailsViewController class] ]){
+        UITableViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.tweetTableView indexPathForCell:tappedCell];
+        Tweet *tweet = self.tweets[indexPath.row];
+        DetailsViewController *detailsViewController = [segue destinationViewController];
+        detailsViewController.tweet = tweet;
+    }
+    else{
+        UINavigationController *navigationController = [segue destinationViewController];
+        ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+        composeController.delegate = self;
+    }
 }
 
 
@@ -100,6 +110,8 @@
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:self.tweets];
     [array addObject:post];
     self.tweets = [array copy];
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [self beginRefresh:refreshControl];
     [self.tweetTableView reloadData];
 }
 

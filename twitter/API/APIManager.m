@@ -100,7 +100,6 @@ static NSString * const consumerSecret = @"ri3ZwMWFybftlNs0nFZac0MFmijxU40q4pONi
 
 - (void)retweet:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion{
     NSString *urlString = [NSString stringWithFormat:@"%@%@%@", @"1.1/statuses/retweet/", tweet.idStr, @".json"];
-    //NSString *urlString = @"1.1/statuses/retweet/:id.json";
     NSDictionary *parameters = @{@"id": tweet.idStr};
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
         Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
@@ -112,7 +111,6 @@ static NSString * const consumerSecret = @"ri3ZwMWFybftlNs0nFZac0MFmijxU40q4pONi
 
 - (void)unretweet:(Tweet *)tweet completion:(void (^)(Tweet * tweet, NSError *error))completion{
     NSString *urlString = [NSString stringWithFormat:@"%@%@%@", @"1.1/statuses/unretweet/", tweet.idStr, @".json"];
-    //NSString *urlString = @"1.1/statuses/unretweet/:id.json";
     NSDictionary *parameters = @{@"id": tweet.idStr};
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
         Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];

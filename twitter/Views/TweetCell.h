@@ -18,9 +18,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *tweetLabel;
 @property (nonatomic, strong) Tweet *tweet;
 @property (weak, nonatomic) IBOutlet UIButton *replyButton;
-@property (weak, nonatomic) IBOutlet UILabel *replyLabel;
 @property (weak, nonatomic) IBOutlet UIButton *retweetButton;
-@property (weak, nonatomic) IBOutlet UILabel *retweetLabel;
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
-@property (weak, nonatomic) IBOutlet UILabel *likeLabel;
 @end
