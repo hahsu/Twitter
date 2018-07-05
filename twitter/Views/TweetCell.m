@@ -8,6 +8,7 @@
 
 #import "TweetCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "DateTools.h"
 #import "APIManager.h"
 
 @implementation TweetCell
@@ -27,7 +28,7 @@
     self.handleLabel.text = fullScreenName;
     
     self.tweetLabel.text = self.tweet.text;
-    self.dateLabel.text = self.tweet.createdAtString;
+    self.dateLabel.text = self.tweet.creationDate.shortTimeAgoSinceNow;
     
     self.profilePic.image = nil;
     if (self.tweet.profilePicURL != nil) {

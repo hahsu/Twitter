@@ -14,9 +14,13 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "DetailsViewController.h"
+#import "InfiniteScrollActivityView.h"
 
-@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tweetTableView;
+@property (assign, nonatomic) BOOL isMoreDataLoading;
+@property(nonatomic, strong) InfiniteScrollActivityView* loadingMoreView;
+@property(nonatomic) int count;
 @end
 
 @implementation TimelineViewController
@@ -25,6 +29,7 @@
     [super viewDidLoad];
     self.tweetTableView.dataSource = self;
     self.tweetTableView.delegate = self;
+    
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tweetTableView insertSubview:refreshControl atIndex:0];
@@ -41,7 +46,16 @@
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
-    }];
+    }count:self.count];
+    
+    CGRect frame = CGRectMake(0, self.tweetTableView.contentSize.height, self.tweetTableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight);
+    self.loadingMoreView = [[InfiniteScrollActivityView alloc] initWithFrame:frame];
+    self.loadingMoreView.hidden = true;
+    [self.tweetTableView addSubview:self.loadingMoreView];
+    
+    UIEdgeInsets insets = self.tweetTableView.contentInset;
+    insets.bottom += InfiniteScrollActivityView.defaultHeight;
+    self.tweetTableView.contentInset = insets;
 }
 
 - (void)beginRefresh:(UIRefreshControl *)refreshControl {
@@ -61,7 +75,7 @@
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
-    }];
+    }count:self.count];
     [self.tweetTableView reloadData];
     
     // Tell the refreshControl to stop spinning
@@ -124,7 +138,32 @@
     [[APIManager shared] logout];
 }
 
- 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if(!self.isMoreDataLoading){
+        int scrollViewContentHeight = self.tweetTableView.contentSize.height;
+        int scrollOffsetThreshold = scrollViewContentHeight - self.tweetTableView.bounds.size.height;
+        if(scrollView.contentOffset.y > scrollOffsetThreshold && self.tweetTableView.isDragging) {
+            self.count += 20;
+            self.isMoreDataLoading = YES;
+            CGRect frame = CGRectMake(0, self.tweetTableView.contentSize.height, self.tweetTableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight);
+            self.loadingMoreView.frame = frame;
+            [self.loadingMoreView startAnimating];
+            
+            // Code to load more results
+            [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
+                if (tweets) {
+                    self.isMoreDataLoading = NO;
+                    self.tweets = tweets;
+                    [self.tweetTableView reloadData];
+                    [self.loadingMoreView stopAnimating];
+                    
+                } else {
+                    NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+                }
+            }count:self.count];
+        }
+    }
+}
 
 
 @end

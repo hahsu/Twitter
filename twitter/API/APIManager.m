@@ -49,9 +49,8 @@ static NSString * const consumerSecret = @"ri3ZwMWFybftlNs0nFZac0MFmijxU40q4pONi
 }
 
 // definition
-- (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion {
-    
-    [self GET:@"1.1/statuses/home_timeline.json"
+- (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion count:(int)count{
+    [self GET:[NSString stringWithFormat:@"%@%i", @"1.1/statuses/home_timeline.json?count=", count]
    parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
        // Success
        NSMutableArray *tweets  = [Tweet tweetsWithArray:tweetDictionaries];
