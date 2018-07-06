@@ -9,8 +9,10 @@
 #import "ComposeViewController.h"
 
 
-@interface ComposeViewController ()
+@interface ComposeViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *composeView;
+@property (weak, nonatomic) IBOutlet UILabel *countLabel;
+@property(strong, nonatomic)NSString *tweetContent;
 
 @end
 
@@ -18,6 +20,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.composeView.delegate = self;
+    self.countLabel.text = [NSString stringWithFormat:@"%i", 140];
     // Do any additional setup after loading the view.
 }
 
@@ -40,6 +44,21 @@
         }
     }];
 }
+
+
+- (void)textViewDidChange:(UITextView *)textView{
+    if(textView.text.length < 141){
+        self.countLabel.text = [NSString stringWithFormat:@"%lu", 140 - textView.text.length];
+        self.tweetContent = textView.text;
+    }
+    else{
+        textView.text = self.tweetContent;
+    }
+}
+
+
+
+
 
 
 /*
