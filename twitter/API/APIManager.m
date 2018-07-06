@@ -119,6 +119,17 @@ static NSString * const consumerSecret = @"ri3ZwMWFybftlNs0nFZac0MFmijxU40q4pONi
     }];
 }
 
+-(void)getUserInfo:(void(^)(User *user, NSError *error))completion{
+    [self GET:@"1.1/account/verify_credentials.json" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable userDict) {
+       // Success
+        User *user = [[User alloc]initWithDictionary:userDict];
+       completion(user, nil);
+   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+       // There was a problem
+       completion(nil, error);
+   }];
+}
+
 
 
 @end

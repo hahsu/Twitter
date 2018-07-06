@@ -11,6 +11,11 @@
 @interface User : NSObject
 @property (nonatomic, strong)NSString *name;
 @property (nonatomic, strong)NSString *screenName;
+@property (nonatomic, strong)NSNumber *numFollowers;
+@property (nonatomic, strong)NSNumber *numFollowing;
+@property (nonatomic, strong)NSNumber *numTweets;
+@property(strong, nonatomic) NSURL *profilePicURL;
+@property(strong, nonatomic)NSURL *profileBackgroundURL;
 
 -(instancetype)initWithDictionary:(NSDictionary *)dictionary;
 @end

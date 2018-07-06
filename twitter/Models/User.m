@@ -14,6 +14,13 @@
     if(self){
         self.name = dictionary[@"name"];
         self.screenName = dictionary[@"screen_name"];
+        self.numFollowers = dictionary[@"followers_count"];
+        self.numFollowing = dictionary[@"friends_count"];
+        self.numTweets = dictionary[@"statuses_count"];
+        NSString *fullProfilePicURLString = dictionary[@"profile_image_url_https"];
+        self.profilePicURL = [NSURL URLWithString:fullProfilePicURLString];
+        NSString *fullBackgroundPicURLString = dictionary[@"profile_banner_url"];
+        self.profileBackgroundURL = [NSURL URLWithString:fullBackgroundPicURLString];
     }
     return self;
 }

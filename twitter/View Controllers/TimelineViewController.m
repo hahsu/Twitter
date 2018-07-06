@@ -15,6 +15,7 @@
 #import "LoginViewController.h"
 #import "DetailsViewController.h"
 #import "InfiniteScrollActivityView.h"
+#import "ProfileViewController.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tweetTableView;
